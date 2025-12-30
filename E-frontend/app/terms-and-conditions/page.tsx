@@ -15,7 +15,7 @@ export default function TermsPage() {
       <h2 className="text-xl font-semibold mt-6">1. User Agreement</h2>
       <p>
         By using our site, you agree to follow these terms and our related
-        policies. "You" refers to the user, and "We" refers to EDemo.
+        policies. &quot;You&quot; refers to the user, and &quot;We&quot; refers to EDemo.
       </p>
 
       <h2 className="text-xl font-semibold mt-6">2. Eligibility</h2>

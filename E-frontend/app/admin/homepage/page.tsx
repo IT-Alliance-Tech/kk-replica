@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { 
   getAdminHomepageBrands, 
   getAdminHomepageCategories,
@@ -42,11 +42,7 @@ export default function AdminHomepagePage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [brandsData, categoriesData] = await Promise.all([
@@ -87,7 +83,11 @@ export default function AdminHomepagePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   function showMessage(type: 'success' | 'error', text: string) {
     setMessage({ type, text });

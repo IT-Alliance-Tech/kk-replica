@@ -1,18 +1,13 @@
-// kk-frontend/app/(auth)/request/RequestOtpClient.tsx
+// E-frontend/app/login/phone/PhoneOtpClient.tsx
 "use client";
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { requestOtp } from "@/lib/api/auth.api";
 import GlobalLoader from "@/components/common/GlobalLoader";
 
-interface RequestOtpClientProps {
-  purpose: "login" | "signup" | "forgot";
-}
-
-export default function RequestOtpClient({ purpose }: RequestOtpClientProps) {
+export default function PhoneOtpClient() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -22,25 +17,25 @@ export default function RequestOtpClient({ purpose }: RequestOtpClientProps) {
     setError(null);
     setSuccess(null);
 
-    if (!email || !email.includes("@")) {
-      setError("Please enter a valid email address");
+    if (!phone || phone.length < 10) {
+      setError("Please enter a valid phone number");
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await requestOtp(email, purpose);
-      setSuccess(result.message || "OTP sent to your email!");
+      // UI only - no backend call
+      console.log('Phone OTP requested for:', phone);
+      setSuccess("OTP would be sent to your phone!");
 
-      // Navigate to verify page after brief delay
+      // Simulate navigation (UI only)
       setTimeout(() => {
-        const encodedEmail = encodeURIComponent(email);
-        router.push(`/auth/verify?email=${encodedEmail}&purpose=${purpose}`);
+        setLoading(false);
+        // No actual navigation since this is UI only
       }, 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send OTP");
-    } finally {
       setLoading(false);
     }
   };
@@ -50,18 +45,18 @@ export default function RequestOtpClient({ purpose }: RequestOtpClientProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
-            htmlFor="email"
+            htmlFor="phone"
             className="block text-sm font-semibold text-slate-700 mb-2.5"
           >
-            Email Address
+            Phone Number
           </label>
           <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
-            placeholder="you@example.com"
+            placeholder="Enter phone number"
             className="w-full px-4 py-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200 text-base placeholder:text-slate-400 hover:border-slate-400 bg-white/50 backdrop-blur-sm"
             disabled={loading}
           />
@@ -98,35 +93,23 @@ export default function RequestOtpClient({ purpose }: RequestOtpClientProps) {
       <div className="mt-4 text-center">
         <button
           type="button"
-          onClick={() => router.push('/login/phone')}
+          onClick={() => router.push('/login')}
           className="text-sm text-slate-500 hover:text-emerald-600 transition-colors duration-200 underline"
         >
-          Login using phone number
+          Login using email instead
         </button>
       </div>
 
       <div className="mt-8 pt-6 border-t border-slate-200 text-center text-sm">
-        {purpose === "signup" ? (
-          <p className="text-slate-600">
-            Already have an account?{" "}
-            <a
-              href="/auth/request?purpose=login"
-              className="text-emerald-600 hover:text-emerald-700 font-semibold hover:underline transition-colors duration-200"
-            >
-              Sign in
-            </a>
-          </p>
-        ) : (
-          <p className="text-slate-600">
-            Don&apos;t have an account?{" "}
-            <a
-              href="/auth/request?purpose=signup"
-              className="text-emerald-600 hover:text-emerald-700 font-semibold hover:underline transition-colors duration-200"
-            >
-              Sign up
-            </a>
-          </p>
-        )}
+        <p className="text-slate-600">
+          Don&apos;t have an account?{" "}
+          <a
+            href="/auth/request?purpose=signup"
+            className="text-emerald-600 hover:text-emerald-700 font-semibold hover:underline transition-colors duration-200"
+          >
+            Sign up
+          </a>
+        </p>
       </div>
     </div>
   );

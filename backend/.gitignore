@@ -13,4 +13,6 @@
 node_modules
 .seed
 .scripts
+dist/
+*.log
 

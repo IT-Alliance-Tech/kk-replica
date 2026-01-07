@@ -9,8 +9,8 @@ const brandSchema = new mongoose.Schema({
   homepageOrder: { 
     type: Number, 
     min: 1, 
-    max: 4,
-    sparse: true // Allow null/undefined, but enforce uniqueness when set
+    max: 4
+    // Note: sparse behavior handled by partialFilterExpression in schema.index() below
   }
 }, { timestamps: true });
 
